@@ -1,7 +1,11 @@
 Once you've updated code: 
 
-`git add .`
+```bash 
+git add .
+git commit -m "msg"
+git push
+```
 
-`git commit -m "msg"`
 
-`git push`
+To get code from shared repo:
+`git pull`
