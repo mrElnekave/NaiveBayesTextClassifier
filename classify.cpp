@@ -1,33 +1,127 @@
+/*
+
+Train the model:
+
+`./classify -train <author1> <author2> ... <authorN>`
+
+Running the model:
+
+`./classify -model=random <input>`
+`./classify -model=statistical <input>`
+*/
 
 #include <fstream>
 #include <iostream>
-#include <random>
 #include <sstream>
 #include <string>
 #include <unordered_map>
 
-struct Author_Probability {
-    std::string author;
-    double probability;
-};
+#include "classification_funcs.cpp"
 
-Author_Probability random_classify(std::string input);
-Author_Probability frequency_classify(std::string input);
+std::string read_file(std::string path);
+
+int train_main(int argc, char* argv[]);
+int random_main(int argc, char* argv[]);
+int frequency_main(int argc, char* argv[]);
 void frequency_trainer(std::string* input, size_t size);
-std::string* read_file(std::string path);
 
+int classify_help() {
+    std::cout << "Usage: classify [options] <input>" << std::endl;
+    std::cout << "Options:" << std::endl;
+    std::cout << "  -train <author1> <author2> ... <authorN>" << std::endl;
+    std::cout << "  -model=random <input>" << std::endl;
+    std::cout << "  -model=frequency <input>" << std::endl;
+    return 0;
+}
+
+/**
+ * flags: -train <author1> <author2> ... <authorN>
+ *        -model=random input.txt
+ *        -model=frequency input.txt
+ */
 int main(int argc, char** argv) {
-    std::cout << "amount of args " << argc << std::endl;
+    if (argc < 3) return classify_help();
 
-    for (size_t i = 0; i < argc; i++) {
-        std::cout << "arg " << i << " is " << argv[i] << std::endl;
+    std::string flag = argv[1];
+
+    if (flag == "-train")
+        return train_main(argc - 1, argv + 1);
+    else if (flag == "-model=random")
+        return random_main(argc - 1, argv + 1);
+    else if (flag == "-model=frequency")
+        return frequency_main(argc - 1, argv + 1);
+
+    else
+        return classify_help();
+}
+
+/**
+ * The runner for the training function.
+ * @argc: The number of arguments without the program name.
+ * @argv: The arguments without the program name.
+ */
+int train_main(int argc, char* argv[]) {
+    std::string* authors = new std::string[argc - 1];
+    for (int i = 0; i < argc - 1; i++) {
+        authors[i] = argv[i + 1];
     }
+
+    std::string* files = new std::string[argc - 1];
+    for (int i = 0; i < argc - 1; i++) {
+        files[i] = "data/" + authors[i] + ".txt";   
+    }
+
+    std::string* contents = new std::string[argc - 1];
+    for (int i = 0; i < argc - 1; i++) {
+        contents[i] = read_file(files[i]);
+    }
+
+    // train(contents, argc - 1);
 
     return 0;
 }
 
-std::string* read_file(std::string path) {
-    // read a file and return its contents as a string
+/**
+ * The runner for the random model.
+ * @argc: The number of arguments without the program name.
+ * @argv: The arguments without the program name.
+ */
+int random_main(int argc, char* argv[]) {
+    if (argc < 2) return classify_help();
+
+    std::string input = read_file(argv[1]);
+
+    Author_Probability output = random_classify(input);
+
+    std::cout << "Author: " << output.author << std::endl;
+    std::cout << "Probability: " << output.probability << std::endl;
+
+    return 0;
+}
+
+/**
+ * The runner for the frequency model.
+ * @argc: The number of arguments without the program name.
+ * @argv: The arguments without the program name.
+ */
+int frequency_main(int argc, char* argv[]) {
+    if (argc < 2) return classify_help();
+
+    std::string input = read_file(argv[1]);
+
+    Author_Probability output = frequency_classify(input);
+
+    std::cout << "Author: " << output.author << std::endl;
+    std::cout << "Probability: " << output.probability << std::endl;
+
+    return 0;
+}
+
+/**
+ * Read a file into a string.
+ * @return The contents of the file.
+ */
+std::string read_file(std::string path) {
     std::stringstream output;
 
     std::ifstream infile(path);
@@ -38,38 +132,7 @@ std::string* read_file(std::string path) {
         output << line << std::endl;
     }
 
-    return new std::string(output.str());
+    return output.str();
 }
 
-Author_Probability random_classify(std::string input) {
-    srand(time(NULL));
 
-    double probability = (double)rand() / (double)RAND_MAX;
-
-    Author_Probability output;
-    output.probability = probability;
-    output.author = "Mark Twain";
-
-    return output;
-}
-
-Author_Probability frequency_classify(std::string input) {
-    return Author_Probability();
-}
-
-void frequency_trainer(std::string* input, size_t size) {
-    std::unordered_map<std::string, int> hash_table_of_all_words;
-    while (input != nullptr) {
-        bool next_char_is_whitespace = false;
-        size_t i = 0;
-        while (!next_char_is_whitespace) {
-            if (input->at(i) == ' ' || input->at(i) == '\n') {
-                next_char_is_whitespace = true;
-                break;
-            }
-            i++;
-        }
-        std::string current_word = input->substr(0, i);
-        hash_table_of_all_words[current_word]++;
-    }
-}
