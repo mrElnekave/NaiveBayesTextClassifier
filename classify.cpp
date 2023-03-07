@@ -18,7 +18,7 @@ int main(int argc, char** argv) {
 }
 
 std::string* read_file(std::string path) {
-    return nullptr;
+    return new std::string("hi");
 }
 
 int random_classify(std::string input) {
