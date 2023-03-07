@@ -23,7 +23,6 @@ std::string read_file(std::string path);
 int train_main(int argc, char* argv[]);
 int random_main(int argc, char* argv[]);
 int frequency_main(int argc, char* argv[]);
-void frequency_trainer(std::string* input, size_t size);
 
 int classify_help() {
     std::cout << "Usage: classify [options] <input>" << std::endl;
