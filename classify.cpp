@@ -4,6 +4,7 @@
 #include <random>
 #include <sstream>
 #include <string>
+#include <unordered_map>
 
 struct Author_Probability {
     std::string author;
@@ -57,5 +58,18 @@ Author_Probability frequency_classify(std::string input) {
 }
 
 void frequency_trainer(std::string* input, size_t size) {
-    return;
+    std::unordered_map<std::string, int> hash_table_of_all_words;
+    while (input != nullptr) {
+        bool next_char_is_whitespace = false;
+        size_t i = 0;
+        while (!next_char_is_whitespace) {
+            if (input->at(i) == ' ' || input->at(i) == '\n') {
+                next_char_is_whitespace = true;
+                break;
+            }
+            i++;
+        }
+        std::string current_word = input->substr(0, i);
+        hash_table_of_all_words[current_word]++;
+    }
 }

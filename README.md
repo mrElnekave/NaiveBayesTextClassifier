@@ -3,7 +3,7 @@
 
 ## Project Description
 
-Make a text classifier, which given a text input, will tell you wich author most likely wrote it.
+Make a text classifier, which given a text input, will tell you which author most likely wrote it.
 
 
 ------
