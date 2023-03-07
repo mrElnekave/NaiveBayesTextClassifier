@@ -34,7 +34,7 @@ void frequency_trainer(std::string* input, size_t size) {
     while (input != nullptr) {
         bool next_char_is_whitespace = false;
         size_t i = 0;
-        while (!next_char_is_whitespace) {
+        while (!next_char_is_whitespace && input->at(i) != std::string::npos) {
             if (input->at(i) == ' ' || input->at(i) == '\n') {
                 next_char_is_whitespace = true;
                 break;
