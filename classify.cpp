@@ -15,11 +15,17 @@ Author_Probability frequency_classify(std::string input);
 void frequency_trainer(std::string* input, size_t size);
 std::string* read_file(std::string path);
 
+/**
+ * flags: -train <author1> <author2> ... <authorN>
+ *       -model=random input.txt
+ *      -model=frequency input.txt
+ */
 int main(int argc, char** argv) {
-    std::cout << "amount of args " << argc << std::endl;
+    std::string flag = argv[1];
 
-    for (size_t i = 0; i < argc; i++) {
-        std::cout << "arg " << i << " is " << argv[i] << std::endl;
+    if (flag == "-train") {
+    } else if (flag == "model=random") {
+    } else if (flag == "model=frequency") {
     }
 
     return 0;
