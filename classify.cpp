@@ -36,6 +36,8 @@ std::string* read_file(std::string path) {
 
         output << line << std::endl;
     }
+
+    return new std::string(output.str());
 }
 
 Author_Probability random_classify(std::string input) {
