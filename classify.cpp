@@ -56,8 +56,8 @@ int main(int argc, char** argv) {
 
 /**
  * The runner for the training function.
- * @argc: The number of arguments without the program name.
- * @argv: The arguments without the program name.
+ * @param argc: The number of arguments without the program name.
+ * @param argv: The arguments without the program name.
  */
 int train_main(int argc, char* argv[]) {
     std::string* authors = new std::string[argc - 1];
@@ -67,7 +67,7 @@ int train_main(int argc, char* argv[]) {
 
     std::string* files = new std::string[argc - 1];
     for (int i = 0; i < argc - 1; i++) {
-        files[i] = "data/" + authors[i] + ".txt";   
+        files[i] = "data/" + authors[i] + ".txt";
     }
 
     std::string* contents = new std::string[argc - 1];
@@ -82,8 +82,8 @@ int train_main(int argc, char* argv[]) {
 
 /**
  * The runner for the random model.
- * @argc: The number of arguments without the program name.
- * @argv: The arguments without the program name.
+ * @param argc: The number of arguments without the program name.
+ * @param argv: The arguments without the program name.
  */
 int random_main(int argc, char* argv[]) {
     if (argc < 2) return classify_help();
@@ -100,8 +100,8 @@ int random_main(int argc, char* argv[]) {
 
 /**
  * The runner for the frequency model.
- * @argc: The number of arguments without the program name.
- * @argv: The arguments without the program name.
+ * @param argc: The number of arguments without the program name.
+ * @param argv: The arguments without the program name.
  */
 int frequency_main(int argc, char* argv[]) {
     if (argc < 2) return classify_help();
@@ -134,4 +134,15 @@ std::string read_file(std::string path) {
     return output.str();
 }
 
+/*
+Mary had a little lamb\n
+and her feet where white as snow
 
+getline(ss, temp, '\n');
+getline(ss, temp, ' ');
+
+regex?
+trim commands?
+
+
+*/
