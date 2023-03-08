@@ -47,7 +47,7 @@ int main(int argc, char** argv) {
         return train_main(argc - 1, argv + 1);
     else if (flag == "-model=random")
         return random_main(argc - 1, argv + 1);
-    else if (flag == "-model=frequency")
+    else if (flag == "-model=statistical")
         return frequency_main(argc - 1, argv + 1);
 
     else
