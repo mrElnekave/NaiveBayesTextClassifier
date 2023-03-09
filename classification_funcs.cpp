@@ -10,25 +10,19 @@ struct Author_Probability {
     double probability;
 };
 
-Author_Probability random_classify(std::string input);
+Author_Probability random_classify(std::string input, std::string* authors);
 Author_Probability frequency_classify(std::string input);
 void frequency_trainer(std::string* input, size_t size);
 
-Author_Probability random_classify(std::string input) {
+Author_Probability random_classify(std::string input, std::string* authors) {
     srand(time(NULL));
-    // need help with getting directory names
-    std::filesystem::directory_iterator directory{"/data/Authors/"};
-    for (size_t i = 0 ; i < rand() % 4; i++) 
-       directory++;
-    
-    std::filesystem::directory_entry current_path;
     
     double probability = (double)rand() / (double)RAND_MAX;
 
     Author_Probability output;
     output.probability = probability;
     
-    output.author = current_path.path();
+    output.author = authors[4 % rand()];
 
     return output;
 }

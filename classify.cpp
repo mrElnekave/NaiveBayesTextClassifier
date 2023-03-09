@@ -92,7 +92,11 @@ int train_main(int argc, char* argv[]) {
 int random_main(int argc, char* argv[]) {
     std::string input = read_file(argv[1]);
 
-    Author_Probability output = random_classify(input);
+    std::string* authors = new std::string[argc - 1];
+    for (int i = 0; i < argc; i++) {
+        authors[i] = argv[i];
+    }
+    Author_Probability output = random_classify(input, authors);
 
     std::cout << "Author: " << output.author << std::endl;
     std::cout << "Probability: " << output.probability << std::endl;
