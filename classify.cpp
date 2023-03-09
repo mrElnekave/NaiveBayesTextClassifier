@@ -60,17 +60,17 @@ int main(int argc, char** argv) {
  * @param argv: The arguments without the program name.
  */
 int train_main(int argc, char* argv[]) {
-    std::string* authors = new std::string[argc - 1];
+    std::string authors[argc - 1];
     for (int i = 0; i < argc - 1; i++) {
         authors[i] = argv[i + 1];
     }
 
-    std::string* files = new std::string[argc - 1];
+    std::string files[argc - 1];
     for (int i = 0; i < argc - 1; i++) {
         files[i] = "data/" + authors[i] + ".txt";
     }
 
-    std::string* contents = new std::string[argc - 1];
+    std::string contents[argc - 1];
     for (int i = 0; i < argc - 1; i++) {
         contents[i] = read_file(files[i]);
     }
@@ -92,7 +92,7 @@ int train_main(int argc, char* argv[]) {
 int random_main(int argc, char* argv[]) {
     std::string input = read_file(argv[1]);
 
-    std::string* authors = new std::string[argc - 1];
+    std::string authors[argc - 1];
     for (int i = 0; i < argc; i++) {
         authors[i] = argv[i];
     }
