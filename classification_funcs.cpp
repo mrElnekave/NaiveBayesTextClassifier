@@ -1,5 +1,6 @@
 
 
+#include <filesystem>
 #include <fstream>
 #include <random>
 #include <string>
@@ -15,12 +16,19 @@ void frequency_trainer(std::string* input, size_t size);
 
 Author_Probability random_classify(std::string input) {
     srand(time(NULL));
-
+    // need help with getting directory names
+    std::filesystem::directory_iterator directory{"/data/Authors/"};
+    for (size_t i = 0 ; i < rand() % 4; i++) 
+       directory++;
+    
+    std::filesystem::directory_entry current_path;
+    
     double probability = (double)rand() / (double)RAND_MAX;
 
     Author_Probability output;
     output.probability = probability;
-    output.author = "Mark Twain";
+    
+    output.author = current_path.path();
 
     return output;
 }
@@ -44,19 +52,19 @@ Author_Probability frequency_classify(std::string input) {
 std::unordered_map<std::string, int> frequency_trainer(const std::string& input) {
     std::unordered_map<std::string, int> hash_table_of_all_words;
 
-    std::stringstream ss(input);
+    std::stringstream ss_current_line(input);
     std::string temp;
-    while (getline(ss, temp, '\n')) {
+    while (getline(ss_current_line, temp, '\n')) {
         std::cout << temp << std::endl;
-        std::stringstream ss2(temp);
-        while (getline(ss2, temp, ' ')) {
+        std::stringstream ss_current_word(temp);
+        while (getline(ss_current_word, temp, ' ')) {
             std::cout << temp << std::endl;
-            for (int i = 0; i < temp.length(); i++) {
+            for (size_t i = 0; i < temp.length(); i++) {
                 if (!isalpha(temp[i])) {
                     temp.erase(i, 1);
                 }
             }
-            if (hash_table_of_all_words.find(temp) == hash_table_of_all_words.end()) {
+            if (hash_table_of_all_words.find(temp) == hash_table_of_all_words.end()) { 
                 hash_table_of_all_words[temp] = 1;
             } else {
                 hash_table_of_all_words[temp]++;

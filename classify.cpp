@@ -90,8 +90,6 @@ int train_main(int argc, char* argv[]) {
  * @param argv: The arguments without the program name.
  */
 int random_main(int argc, char* argv[]) {
-    if (argc < 2) return classify_help();
-
     std::string input = read_file(argv[1]);
 
     Author_Probability output = random_classify(input);
