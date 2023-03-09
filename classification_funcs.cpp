@@ -16,13 +16,12 @@ void frequency_trainer(std::string* input, size_t size);
 
 Author_Probability random_classify(std::string input, std::string* authors) {
     srand(time(NULL));
-    
     double probability = (double)rand() / (double)RAND_MAX;
 
     Author_Probability output;
     output.probability = probability;
-    
-    output.author = authors[4 % rand()];
+
+    output.author = "twain";
 
     return output;
 }
@@ -58,7 +57,7 @@ std::unordered_map<std::string, int> frequency_trainer(const std::string& input)
                     temp.erase(i, 1);
                 }
             }
-            if (hash_table_of_all_words.find(temp) == hash_table_of_all_words.end()) { 
+            if (hash_table_of_all_words.find(temp) == hash_table_of_all_words.end()) {
                 hash_table_of_all_words[temp] = 1;
             } else {
                 hash_table_of_all_words[temp]++;
