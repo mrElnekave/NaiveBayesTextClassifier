@@ -46,6 +46,7 @@ int main(int argc, char** argv) {
     if (flag == "-train")
         return train_main(argc - 1, argv + 1);
     else if (flag == "-model=random")
+        // return 1;
         return random_main(argc - 1, argv + 1);
     else if (flag == "-model=statistical")
         return frequency_main(argc - 1, argv + 1);
@@ -91,7 +92,6 @@ int train_main(int argc, char* argv[]) {
  */
 int random_main(int argc, char* argv[]) {
     std::string input = read_file(argv[1]);
-
     std::string authors[argc - 1];
     for (int i = 0; i < argc; i++) {
         authors[i] = argv[i];
@@ -100,7 +100,6 @@ int random_main(int argc, char* argv[]) {
 
     std::cout << "Author: " << output.author << std::endl;
     std::cout << "Probability: " << output.probability << std::endl;
-
     return 0;
 }
 
