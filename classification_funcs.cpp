@@ -34,26 +34,61 @@ Author_Probability frequency_classify(std::string input) {
  *
  * We classify the amount of each word in the book, and divide it be the total amount of words.
  * Such, we get a profile of an authors writing style.
+ * Ignores all non-alphabetical characters. And new lines.
+ *
+ * WARNING: "" is sometimes counted as a word.
+ * Example: "Yamm and Nathan are working on this project.\nWow this is so cool. Damn it works on this computer. I am repeathing this.\n\n\n\n\n\n\n Even works with many new lines."
  * @param input The input string.
  * @return The frequency of each word in the book. (Authors profile)
+ * NOTE: pass in an input file stream ifstream.
+ * Consider this signature std::unordered_map<std::string, int> frequency_trainer(std::ifstream& input) {
  */
+
+// returns vocab size.
+/* size_t count_words (hash& hash, std::istream& stream) {
+    string word;
+    while (stream >> word) {
+
+        do the hash stuff.
+}
+}
+// Space delimeted istream, no punctuation. Normalized words.
+*/
 std::unordered_map<std::string, int> frequency_trainer(const std::string& input) {
     std::unordered_map<std::string, int> hash_table_of_all_words;
-    while (input != "") {
-        bool next_char_is_whitespace = false;
-        size_t i = 0;
-        while (!next_char_is_whitespace && input.at(i) != std::string::npos) {
-            if (input.at(i) == ' ' || input.at(i) == '\n') {
-                next_char_is_whitespace = true;
-                break;
+
+    std::stringstream ss(input);
+    std::string temp;
+    while (getline(ss, temp, '\n')) {
+        std::cout << temp << std::endl;
+        std::stringstream ss2(temp);
+        while (getline(ss2, temp, ' ')) {
+            std::cout << temp << std::endl;
+            for (size_t i = 0; i < temp.length(); i++) {
+                if (!isalpha(temp[i])) {
+                    temp.erase(i, 1);
+                }
             }
-            i++;
+            if (hash_table_of_all_words.find(temp) == hash_table_of_all_words.end()) {
+                hash_table_of_all_words[temp] = 1;
+            } else {
+                hash_table_of_all_words[temp]++;
+            }
         }
-        std::string current_word = input.substr(0, i);  // Will cut off substring, and update input string.
-        hash_table_of_all_words[current_word]++;
     }
+
+    return hash_table_of_all_words;
 }
 
-void call() {
-    auto temp = frequency_trainer("Hello, my name is Mark Twain. I am a writer.");
-}
+/*
+Mary had a little lamb\n
+and her feet where white as snow
+
+getline(ss, temp, '\n');
+getline(ss, temp, ' ');
+
+regex?
+trim commands?
+
+
+*/

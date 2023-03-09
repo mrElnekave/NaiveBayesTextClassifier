@@ -76,6 +76,10 @@ int train_main(int argc, char* argv[]) {
     }
 
     // train(contents, argc - 1);
+    auto map = frequency_trainer("Yamm and Nathan are working on this project.\nWow this is so cool. Damn it works on this computer. I am repeathing this.\n\n\n\n\n\n\n Even works with many new lines.");
+    for (auto it = map.begin(); it != map.end(); it++) {
+        std::cout << it->first << ": " << it->second << std::endl;
+    }
 
     return 0;
 }
@@ -133,16 +137,3 @@ std::string read_file(std::string path) {
 
     return output.str();
 }
-
-/*
-Mary had a little lamb\n
-and her feet where white as snow
-
-getline(ss, temp, '\n');
-getline(ss, temp, ' ');
-
-regex?
-trim commands?
-
-
-*/
