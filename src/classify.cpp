@@ -11,6 +11,7 @@ Running the model:
 */
 
 #include <cstdlib>
+#include <cstring>
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -45,12 +46,12 @@ int main(int argc, char** argv) {
     std::string flag = argv[1];
 
     if (flag == "-train") {
-        std::cout << std::flush;
-        std::string flag2 = argv[2];
-        //FIX ME: Allow argv to be used as an input to train.bash
-        std::system("/bin/bash ./train.bash ");
+        char command[24 + strlen(argv[2])] = "/bin/bash ./train.bash ";
+        char author_name[strlen(argv[2]) + 1];
+        strcpy(author_name, argv[2]);
+        std::strcat(command, author_name);
+        std::system(command);
         return 0;
-        //return train_main(argc - 1, argv + 1);
     }   
     else if (flag == "-model=random")
         return random_main(argc - 1, argv + 1);
