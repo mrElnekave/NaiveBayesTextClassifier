@@ -10,6 +10,7 @@ Running the model:
 `./classify -model=statistical <input>`
 */
 
+#include <cstdlib>
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -43,8 +44,14 @@ int main(int argc, char** argv) {
 
     std::string flag = argv[1];
 
-    if (flag == "-train")
-        return train_main(argc - 1, argv + 1);
+    if (flag == "-train") {
+        std::cout << std::flush;
+        std::string flag2 = argv[2];
+        //FIX ME: Allow argv to be used as an input to train.bash
+        std::system("/bin/bash ./train.bash ");
+        return 0;
+        //return train_main(argc - 1, argv + 1);
+    }   
     else if (flag == "-model=random")
         return random_main(argc - 1, argv + 1);
     else if (flag == "-model=statistical")
