@@ -1,1 +1,1 @@
-cat $* | new_lines_to_spaces.bash
+cat $* | new_lines_to_@symbols.bash.bash

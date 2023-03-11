@@ -26,7 +26,7 @@ int main(int argc, char** argv) {
 
     std::string word;
     while (std::cin >> word) {
-        myfile << word;
+        myfile << word << " ";
     }
 }
 
