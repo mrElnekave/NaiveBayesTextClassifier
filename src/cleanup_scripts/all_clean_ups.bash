@@ -1,0 +1,1 @@
+cat $* | new_lines_to_spaces.bash
