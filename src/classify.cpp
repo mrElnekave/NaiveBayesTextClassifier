@@ -16,9 +16,8 @@ Running the model:
 #include <iostream>
 #include <sstream>
 #include <string>
-#include <unordered_map>
 
-#include "classification_funcs.cpp"
+#include "helpers/classification_funcs.cpp"
 
 std::string read_file(std::string path);
 
@@ -36,7 +35,7 @@ int classify_help() {
 }
 
 /**
- * flags: -train <author1> <author2> ... <authorN>
+ * flags: -train <dir_to_authors>
  *        -model=random input.txt
  *        -model=frequency input.txt
  */
@@ -52,8 +51,7 @@ int main(int argc, char** argv) {
         std::strcat(command, author_name);
         std::system(command);
         return 0;
-    }   
-    else if (flag == "-model=random")
+    } else if (flag == "-model=random")
         return random_main(argc - 1, argv + 1);
     else if (flag == "-model=statistical")
         return frequency_main(argc - 1, argv + 1);
