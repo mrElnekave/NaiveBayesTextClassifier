@@ -28,7 +28,7 @@ int frequency_main(int argc, char* argv[]);
 int classify_help() {
     std::cout << "Usage: classify [options] <input>" << std::endl;
     std::cout << "Options:" << std::endl;
-    std::cout << "  -train <author1> <author2> ... <authorN>" << std::endl;
+    std::cout << "  -train <dir_to_authors>" << std::endl;
     std::cout << "  -model=random <input>" << std::endl;
     std::cout << "  -model=frequency <input>" << std::endl;
     return 0;
@@ -45,11 +45,11 @@ int main(int argc, char** argv) {
     std::string flag = argv[1];
 
     if (flag == "-train") {
-        char command[24 + strlen(argv[2])] = "/bin/bash ./train.bash ";
+        char command[24 + strlen(argv[2])] = "/bin/bash ./train_dir.bash ";
         char author_name[strlen(argv[2]) + 1];
         strcpy(author_name, argv[2]);
         std::strcat(command, author_name);
-        std::system(command);
+        std::system("command");
         return 0;
     } else if (flag == "-model=random")
         return random_main(argc - 1, argv + 1);
