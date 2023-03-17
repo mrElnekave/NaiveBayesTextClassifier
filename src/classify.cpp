@@ -45,11 +45,11 @@ int main(int argc, char** argv) {
     std::string flag = argv[1];
 
     if (flag == "-train") {
-        char command[24 + strlen(argv[2])] = "/bin/bash ./train_dir.bash ";
-        char author_name[strlen(argv[2]) + 1];
+        char command[24 + strlen(argv[2])] = "/bin/bash ./train.bash ";
+        char author_name[strlen(argv[2])];
         strcpy(author_name, argv[2]);
         std::strcat(command, author_name);
-        std::system("command");
+        std::system(command);
         return 0;
     } else if (flag == "-model=random")
         return random_main(argc - 1, argv + 1);
