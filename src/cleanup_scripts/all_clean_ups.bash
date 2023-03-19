@@ -2,7 +2,8 @@
 # but is there to write to cmd line?
 
 cat $* \
-    | ./upper_to_lower.bash \
     | ./precleanup.sed \
-    | ./new_lines_to_@.bash \
+    | ./new_lineNspaces.bash \
+    | ./upper_to_lower.bash \
+
 
