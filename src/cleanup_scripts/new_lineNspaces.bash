@@ -1,1 +1,1 @@
-cat $*  | tr "\r" " " | tr "\n" " " | tr -s " "
+cat $* | tr "\r" " " | tr "\n" " " | tr -s " "

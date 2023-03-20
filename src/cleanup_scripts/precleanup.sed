@@ -1,14 +1,13 @@
 #!/usr/bin/sed -f
 
-# This is and .sed script to get rid of all the extra spaces in a file
-
-#/^ *$/d
-#s/[.]  / /g 
-#/^[ \t][ \t]*$/d
-#s/[ \t][ \t]*/ /g
+# delete all the start until the first ***
+# using this regex ^[\s\S]*\*\*\*
+s/^[\s\S]*\*\*\*//g
 
 
 # Save only letters, spaces, and dashes
 # s/ means substitute
 # /g means apply to all occurrences
-s/[^A-Za-z -]/ /g
+s/[^A-Za-z0-9 -']/ /g
+
+

@@ -1,1 +1,1 @@
-cat $*  | tr A-Z a-z
+cat $* | tr A-Z a-z
