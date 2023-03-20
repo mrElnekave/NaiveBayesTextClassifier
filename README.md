@@ -1,13 +1,12 @@
 # NaiveBayesTextClassifier
--------
+
+---
 
 ## Project Description
 
 Make a text classifier, which given a text input, will tell you which author most likely wrote it.
 
-
-------
-
+---
 
 Assumption: All of each author's works will be in one input file (MarkTwain.txt)
 
@@ -20,8 +19,7 @@ This would create an internal model, that could classify each of the n authors, 
 For example:
 Our "internal model" could be n files, with data distilled from the n inputs of authors.
 
-
-----------------------
+---
 
 Running the model:
 
@@ -36,8 +34,12 @@ Ex:
 
 > Snow white : 200
 
-
 Goals:
-* ./classify script taking in input
-* Build a model that looks at relative counts of words to distinguish authors  (% of words in text)
-* Some data cleaning script (python?)
+
+- ./classify script taking in input
+- Build a model that looks at relative counts of words to distinguish authors (% of words in text)
+- Some data cleaning script (python?)
+
+Train writes a model to Models folder from some input and author.
+
+Classify reads all Models in Models folder, and says which is most alike to some input. Which author it predicts.
