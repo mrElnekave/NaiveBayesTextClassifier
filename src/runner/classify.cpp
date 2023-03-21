@@ -46,7 +46,7 @@ int main(int argc, char** argv) {
         return train_main(argc - 1, argv + 1);
     } else if (flag == "-model=random")
         return random_main(argc - 1, argv + 1);
-    else if (flag == "-model=statistical")
+    else if (flag == "-model=frequency")
         return frequency_main(argc - 1, argv + 1);
 
     else
@@ -107,10 +107,11 @@ int frequency_main(int argc, char* argv[]) {
         return 1;
     }
 
-    std::vector<Author_Probability> output = frequency_classify(file, "./Models/");
-
-    std::cout << "Author: " << output[0].author << std::endl;
-    std::cout << "Probability: " << output[0].probability << std::endl;
+    std::vector<Author_Probability> output = frequency_classify(file, "./Models/Counts/");
+    for (int i = 0; i < output.size(); i++) {
+        std::cout << "Author: " << output[i].author << std::endl;
+        std::cout << "Probability: " << output[i].probability << std::endl;
+    }
 
     return 0;
 }

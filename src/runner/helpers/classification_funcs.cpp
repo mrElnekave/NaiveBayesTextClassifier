@@ -16,12 +16,15 @@ struct Author_Probability {
     bool operator<(const Author_Probability& other) const {
         return probability < other.probability;
     }
+    bool operator>(const Author_Probability& other) const {
+        return probability > other.probability;
+    }
 };
 
 Author_Probability random_classify(std::string input);
 std::vector<Author_Probability> frequency_classify(std::string input);
-float frequency_helper(std::unordered_map<std::string, float> map, std::ifstream& file);
-std::unordered_map<std::string, float> read_from_model_file(std::string file_name);
+float frequency_helper(std::unordered_map<std::string, float> map, std::ifstream& file, int total_number_of_words);
+std::unordered_map<std::string, float> read_from_model_file(std::string file_name, int& total_number_of_words);
 float get_probability(int count_of_word, int total_number_of_words);
 
 Author_Probability random_classify(std::string input) {
@@ -53,10 +56,12 @@ std::vector<Author_Probability> frequency_classify(std::ifstream& file, std::str
     int start_of_file = file.tellg();
 
     for (const auto& file_name : directory) {
-        std::unordered_map<std::string, float> map = read_from_model_file(file_name.path().string());
+        std::cout << "testing " << file_name.path().stem().string() << " model" << std::endl;
+        int total_number_of_words;
+        auto map = read_from_model_file(file_name.path().string(), total_number_of_words);
 
         file.seekg(start_of_file);
-        float probability = frequency_helper(map, file);
+        float probability = frequency_helper(map, file, total_number_of_words);
 
         Author_Probability author_probability;
         author_probability.author = file_name.path().stem().string();
@@ -65,22 +70,22 @@ std::vector<Author_Probability> frequency_classify(std::ifstream& file, std::str
         output.push_back(author_probability);
     }
 
-    std::sort(output.begin(), output.end());
+    std::sort(output.begin(), output.end(), std::greater<Author_Probability>());
 
     return output;
 }
 
-float frequency_helper(std::unordered_map<std::string, float> map, std::ifstream& file) {
+float frequency_helper(std::unordered_map<std::string, float> map, std::ifstream& file, int total_number_of_words) {
     float probability = 1.0;
     std::string word;
     while (!file.eof()) {
         file >> word;
-        probability *= map[word] + 1;
+        probability *= map[word] + 1.0 / (float)total_number_of_words;
     }
     return probability;
 }
 
-std::unordered_map<std::string, float> read_from_model_file(std::string file_name) {
+std::unordered_map<std::string, float> read_from_model_file(std::string file_name, int& total_number_of_words) {
     std::ifstream myfile;
     myfile.open(file_name, std::ifstream::in);  // change this directory to the clean data folder once we have it
 
@@ -90,7 +95,6 @@ std::unordered_map<std::string, float> read_from_model_file(std::string file_nam
     std::unordered_map<std::string, float> hash_table_of_all_words;
     std::string word;
     int count_of_word;
-    int total_number_of_words;
     myfile >> total_number_of_words;
 
     while (!myfile.eof()) {
