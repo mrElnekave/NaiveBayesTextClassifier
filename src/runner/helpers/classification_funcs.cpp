@@ -39,13 +39,14 @@ Author_Probability random_classify(std::string input) {
  * Open all the files in ../Models/* and read the data of each author
  * Calculate the probablity of the author given the input
  *
- * @param input
+ * @param file the input file to classify
+ * @param path_to_models the path to the models folder
  * @return sorted vector of Author_Probability, most likely first
  */
-std::vector<Author_Probability> frequency_classify(std::ifstream& file, std::string path) {
+std::vector<Author_Probability> frequency_classify(std::ifstream& file, std::string path_to_models) {
     std::vector<Author_Probability> output;
 
-    std::filesystem::directory_iterator directory(path);
+    std::filesystem::directory_iterator directory(path_to_models);
 
     int start_of_file = file.tellg();
 

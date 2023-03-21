@@ -112,12 +112,17 @@ int random_main(int argc, char* argv[]) {
 int frequency_main(int argc, char* argv[]) {
     if (argc < 2) return classify_help();
 
-    std::string input = read_file(argv[1]);
+    std::ifstream file(argv[1]);
 
-    Author_Probability output = frequency_classify(input);
+    if (!file.is_open()) {
+        std::cout << "Error: Could not open file." << std::endl;
+        return 1;
+    }
 
-    std::cout << "Author: " << output.author << std::endl;
-    std::cout << "Probability: " << output.probability << std::endl;
+    std::vector<Author_Probability> output = frequency_classify(file, "./Models/");
+
+    std::cout << "Author: " << output[0].author << std::endl;
+    std::cout << "Probability: " << output[0].probability << std::endl;
 
     return 0;
 }
