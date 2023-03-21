@@ -81,11 +81,7 @@ int train_main(int argc, char* argv[]) {
         contents[i] = read_file(files[i]);
     }
 
-    // train(contents, argc - 1);
-    auto map = frequency_trainer("Yamm and Nathan are working on this project.\nWow this is so cool. Damn it works on this computer. I am repeathing this.\n\n\n\n\n\n\n Even works with many new lines.");
-    for (auto it = map.begin(); it != map.end(); it++) {
-        std::cout << it->first << ": " << it->second << std::endl;
-    }
+    // TODO: Train the model. using the train_model.cpp file.
 
     return 0;
 }
@@ -124,22 +120,4 @@ int frequency_main(int argc, char* argv[]) {
     std::cout << "Probability: " << output.probability << std::endl;
 
     return 0;
-}
-
-/**
- * Read a file into a string.
- * @return The contents of the file.
- */
-std::string read_file(std::string path) {
-    std::stringstream output;
-
-    std::ifstream infile(path);
-    std::string line;
-    while (std::getline(infile, line)) {
-        std::istringstream iss(line);
-
-        output << line << std::endl;
-    }
-
-    return output.str();
 }
