@@ -20,7 +20,9 @@ struct Author_Probability {
 
 Author_Probability random_classify(std::string input);
 std::vector<Author_Probability> frequency_classify(std::string input);
-void frequency_trainer(std::string* input, size_t size);
+float frequency_helper(std::unordered_map<std::string, float> map, std::ifstream& file);
+std::unordered_map<std::string, float> read_from_model_file(std::string file_name);
+float get_probability(int count_of_word, int total_number_of_words);
 
 Author_Probability random_classify(std::string input) {
     srand(time(NULL));
@@ -77,9 +79,6 @@ float frequency_helper(std::unordered_map<std::string, float> map, std::ifstream
     }
     return probability;
 }
-
-// given void write_to_file(std::string file_name, const std::unordered_map<std::string, int>& hash_table_of_all_words, int total_number_of_words);
-// make a file reader that reads in the file the unorderd map and the total number of words.
 
 std::unordered_map<std::string, float> read_from_model_file(std::string file_name) {
     std::ifstream myfile;

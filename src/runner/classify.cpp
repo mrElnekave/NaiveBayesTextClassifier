@@ -19,8 +19,6 @@ Running the model:
 
 #include "helpers/classification_funcs.cpp"
 
-std::string read_file(std::string path);
-
 int train_main(int argc, char* argv[]);
 int random_main(int argc, char* argv[]);
 int frequency_main(int argc, char* argv[]);
@@ -45,12 +43,7 @@ int main(int argc, char** argv) {
     std::string flag = argv[1];
 
     if (flag == "-train") {
-        char command[24 + strlen(argv[2])] = "/bin/bash ./train.bash ";
-        char author_name[strlen(argv[2])];
-        strcpy(author_name, argv[2]);
-        std::strcat(command, author_name);
-        std::system(command);
-        return 0;
+        return train_main(argc - 1, argv + 1);
     } else if (flag == "-model=random")
         return random_main(argc - 1, argv + 1);
     else if (flag == "-model=statistical")
@@ -61,28 +54,17 @@ int main(int argc, char** argv) {
 }
 
 /**
- * The runner for the training function.
+ * The runner for the training model.
  * @param argc: The number of arguments without the program name.
  * @param argv: The arguments without the program name.
  */
 int train_main(int argc, char* argv[]) {
-    std::string* authors = new std::string[argc - 1];
-    for (int i = 0; i < argc - 1; i++) {
-        authors[i] = argv[i + 1];
-    }
-
-    std::string* files = new std::string[argc - 1];
-    for (int i = 0; i < argc - 1; i++) {
-        files[i] = "data/" + authors[i] + ".txt";
-    }
-
-    std::string* contents = new std::string[argc - 1];
-    for (int i = 0; i < argc - 1; i++) {
-        contents[i] = read_file(files[i]);
-    }
-
-    // TODO: Train the model. using the train_model.cpp file.
-
+    if (argc < 2) return classify_help();
+    char command[24 + strlen(argv[1])] = "/bin/bash ./train_dir.bash ";
+    char author_name[strlen(argv[1])];
+    strcpy(author_name, argv[1]);
+    std::strcat(command, author_name);
+    std::system(command);
     return 0;
 }
 
@@ -94,12 +76,12 @@ int train_main(int argc, char* argv[]) {
 int random_main(int argc, char* argv[]) {
     if (argc < 2) return classify_help();
 
-    std::string input = read_file(argv[1]);
+    // std::string input = read_file(argv[1]);
 
-    Author_Probability output = random_classify(input);
+    // Author_Probability output = random_classify(input);
 
-    std::cout << "Author: " << output.author << std::endl;
-    std::cout << "Probability: " << output.probability << std::endl;
+    // std::cout << "Author: " << output.author << std::endl;
+    // std::cout << "Probability: " << output.probability << std::endl;
 
     return 0;
 }
