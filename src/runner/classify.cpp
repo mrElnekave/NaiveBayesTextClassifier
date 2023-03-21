@@ -59,8 +59,14 @@ int main(int argc, char** argv) {
  * @param argv: The arguments without the program name.
  */
 int train_main(int argc, char* argv[]) {
+    // // print all argv and return
+    // for (int i = 0; i < argc; i++) {
+    //     std::cout << argv[i] << std::endl;
+    // }
+    // return 0;
+
     if (argc < 2) return classify_help();
-    char command[24 + strlen(argv[1])] = "/bin/bash ./train_dir.bash ";
+    char command[24 + strlen(argv[1])] = "bash ./train_dir.bash ";
     char author_name[strlen(argv[1])];
     strcpy(author_name, argv[1]);
     std::strcat(command, author_name);

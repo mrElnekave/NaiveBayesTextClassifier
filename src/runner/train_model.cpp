@@ -12,24 +12,21 @@ and twain_vocab.txt
 #include <unordered_map>
 
 std::unordered_map<std::string, int> get_word_counts(std::string file_name, int& total_number_of_words);
-void write_to_file(std::string file_name, const std::unordered_map<std::string, int>& hash_table_of_all_words, int total_number_of_words);
+void write_to_file(std::string file_name_counts, std::string file_name_vocab, const std::unordered_map<std::string, int>& hash_table_of_all_words, int total_number_of_words);
 
 int main(int argc, char** argv) {
     std::string author = argv[1];
-    author = author.substr(0, author.size());
+    author = author.substr(8, author.size());
 
-    // uses cin stream to get each word
-    // while (cin > word)
-    // train the models, and write to correct files
+    std::cout << "Training model for " << author << "..." << std::endl;
 
-    // write all of cin to text file
-    std::string file_name = "../../data/Authors/" + author + ".txt";
+    std::string file_name = "../../data/Authors/" + author;
     int total_number_of_words;
-    auto Author_map = get_word_counts(file_name, total_number_of_words);
+    const std::unordered_map<std::string, int> Author_map = get_word_counts(file_name, total_number_of_words);
 
     // write to file
     std::string file_name_counts = "./Models/Counts/" + author;
-    std::string file_name_vocab = "./Models/Vocab" + author;
+    std::string file_name_vocab = "./Models/Vocab/" + author;
     write_to_file(file_name_counts, file_name_vocab, Author_map, total_number_of_words);
 }
 
@@ -38,10 +35,10 @@ std::unordered_map<std::string, int> get_word_counts(std::string file_name, int&
     std::string word;
     std::ifstream myfile;
     total_number_of_words = 0;
-    myfile.open(file_name, std::ifstream::in);  // change this directory to the clean data folder once we have it
+    myfile.open(file_name);  // change this directory to the clean data folder once we have it
 
     if (myfile.fail())
-        std::cout << "File could not open." << std::endl;
+        std::cout << "File could not open " + file_name + ". GWC" << std::endl;
 
     while (!myfile.eof()) {
         myfile >> word;
@@ -64,7 +61,7 @@ void write_to_file(std::string file_name_counts, std::string file_name_vocab, co
     myfile2.open(file_name_vocab, std::ofstream::out | std::ofstream::trunc);  // change this directory to the clean data folder once we have it
 
     if (myfile.fail() | myfile2.fail())
-        std::cout << "File could not open." << std::endl;
+        std::cout << "File could not open. WTF" << std::endl;
 
     myfile << total_number_of_words << std::endl;
 
