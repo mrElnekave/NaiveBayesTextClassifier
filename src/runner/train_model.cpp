@@ -35,7 +35,7 @@ std::unordered_map<std::string, int> get_word_counts(std::string file_name, int&
     std::string word;
     std::ifstream myfile;
     total_number_of_words = 0;
-    myfile.open(file_name);  // change this directory to the clean data folder once we have it
+    myfile.open(file_name, std::ofstream::out | std::ofstream::trunc);
 
     if (myfile.fail())
         std::cout << "File could not open " + file_name + ". GWC" << std::endl;
@@ -57,9 +57,9 @@ std::unordered_map<std::string, int> get_word_counts(std::string file_name, int&
 void write_to_file(std::string file_name_counts, std::string file_name_vocab, const std::unordered_map<std::string, int>& hash_table_of_all_words, int total_number_of_words) {
     std::ofstream myfile;
     std::ofstream myfile2;
-    myfile.open(file_name_counts, std::ofstream::out | std::ofstream::trunc);  // change this directory to the clean data folder once we have it
-    myfile2.open(file_name_vocab, std::ofstream::out | std::ofstream::trunc);  // change this directory to the clean data folder once we have it
-
+    myfile.open(file_name_counts, std::ofstream::out | std::ofstream::trunc);  
+    myfile2.open(file_name_vocab, std::ofstream::out | std::ofstream::trunc);  
+    
     if (myfile.fail() | myfile2.fail())
         std::cout << "File could not open. WTF" << std::endl;
 
