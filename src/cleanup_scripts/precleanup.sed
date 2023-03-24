@@ -2,7 +2,7 @@
 
 # delete all the start until the first ***
 # using this regex ^[\s\S]*\*\*\*
-# s/^[\s\S]*[*][*][*] START OF THIS PROJECT//g
+# 1,/^[\s\S]*[*][*][*] START OF THIS PROJECT/d
 
 1,/[. ]*/d
 
