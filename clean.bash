@@ -21,6 +21,8 @@ cat $* \
     | sed -e 's/www//g' \
     | sed -e 's/pgdp//g' \
     | sed -e 's/http//g' \
+    | tr -s ' ' \
+    | grep -v '<S> <\/S>' \
     | ./delete_single_letter.bash
 
 #line 19 needs fix
