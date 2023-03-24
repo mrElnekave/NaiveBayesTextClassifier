@@ -1,5 +1,7 @@
 
 
+#include <algorithm>
+#include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <random>
@@ -10,11 +12,20 @@
 struct Author_Probability {
     std::string author;
     double probability;
+
+    bool operator<(const Author_Probability& other) const {
+        return probability < other.probability;
+    }
+    bool operator>(const Author_Probability& other) const {
+        return probability > other.probability;
+    }
 };
 
 Author_Probability random_classify(std::string input);
-Author_Probability frequency_classify(std::string input);
-void frequency_trainer(std::string* input, size_t size);
+std::vector<Author_Probability> frequency_classify(std::string input);
+float frequency_helper(std::unordered_map<std::string, float> map, std::ifstream& file, int total_number_of_words);
+std::unordered_map<std::string, float> read_from_model_file(std::string file_name, int& total_number_of_words);
+float get_probability(int count_of_word, int total_number_of_words);
 
 Author_Probability random_classify(std::string input) {
     srand(time(NULL));
@@ -28,70 +39,86 @@ Author_Probability random_classify(std::string input) {
     return output;
 }
 
-Author_Probability frequency_classify(std::string input) {
-    return Author_Probability();
-}
-
 /**
- * Has input string, which is an entire book in plain text.
+ * @brief Classify the input using the frequency model
+ * Open all the files in ../Models/* and read the data of each author
+ * Calculate the probablity of the author given the input
  *
- * We classify the amount of each word in the book, and divide it be the total amount of words.
- * Such, we get a profile of an authors writing style.
- * Ignores all non-alphabetical characters. And new lines.
- *
- * WARNING: "" is sometimes counted as a word.
- * Example: "Yamm and Nathan are working on this project.\nWow this is so cool. Damn it works on this computer. I am repeathing this.\n\n\n\n\n\n\n Even works with many new lines."
- * @param input The input string.
- * @return The frequency of each word in the book. (Authors profile)
- * NOTE: pass in an input file stream ifstream.
- * Consider this signature std::unordered_map<std::string, int> frequency_trainer(std::ifstream& input) {
+ * @param file the input file to classify
+ * @param path_to_models the path to the models folder
+ * @return sorted vector of Author_Probability, most likely first
  */
+std::vector<Author_Probability> frequency_classify(std::ifstream& file, std::string path_to_models) {
+    std::vector<Author_Probability> output;
 
-// returns vocab size.
-/* size_t count_words (hash& hash, std::istream& stream) {
-    string word;
-    while (stream >> word) {
+    std::filesystem::directory_iterator directory(path_to_models);
 
-        do the hash stuff.
-}
-}
-// Space delimeted istream, no punctuation. Normalized words.
-*/
-std::unordered_map<std::string, int> frequency_trainer(const std::string& input) {
-    std::unordered_map<std::string, int> hash_table_of_all_words;
+    int start_of_file = file.tellg();
 
-    std::stringstream ss(input);
-    std::string temp;
-    while (getline(ss, temp, '\n')) {
-        std::cout << temp << std::endl;
-        std::stringstream ss2(temp);
-        while (getline(ss2, temp, ' ')) {
-            std::cout << temp << std::endl;
-            for (size_t i = 0; i < temp.length(); i++) {
-                if (!isalpha(temp[i])) {
-                    temp.erase(i, 1);
-                }
-            }
-            if (hash_table_of_all_words.find(temp) == hash_table_of_all_words.end()) {
-                hash_table_of_all_words[temp] = 1;
-            } else {
-                hash_table_of_all_words[temp]++;
-            }
-        }
+    for (const auto& file_name : directory) {
+        std::cout << "testing " << file_name.path().stem().string() << " model" << std::endl;
+        int total_number_of_words;
+        auto map = read_from_model_file(file_name.path().string(), total_number_of_words);
+
+        file.seekg(start_of_file);
+        float probability = frequency_helper(map, file, total_number_of_words);
+
+        Author_Probability author_probability;
+        author_probability.author = file_name.path().stem().string();
+        author_probability.probability = probability;
+
+        output.push_back(author_probability);
     }
+
+    std::sort(output.begin(), output.end(), std::greater<Author_Probability>());
+
+    return output;
+}
+
+float frequency_helper(std::unordered_map<std::string, float> map, std::ifstream& file, int total_number_of_words) {
+    float probability = 1.0;
+    std::string word;
+    while (!file.eof()) {
+        file >> word;
+        probability *= map[word] + 1.0 / (float)total_number_of_words;
+    }
+    return probability;
+}
+
+std::unordered_map<std::string, float> read_from_model_file(std::string file_name, int& total_number_of_words) {
+    std::ifstream myfile;
+    myfile.open(file_name, std::ifstream::in);  // change this directory to the clean data folder once we have it
+
+    if (myfile.fail())
+        std::cout << "File could not open." << std::endl;
+
+    std::unordered_map<std::string, float> hash_table_of_all_words;
+    std::string word;
+    int count_of_word;
+    myfile >> total_number_of_words;
+
+    while (!myfile.eof()) {
+        myfile >> word;
+        myfile >> count_of_word;
+
+        hash_table_of_all_words[word] = get_probability(count_of_word, total_number_of_words);
+    }
+
+    myfile.close();
 
     return hash_table_of_all_words;
 }
 
-/*
-Mary had a little lamb\n
-and her feet where white as snow
-
-getline(ss, temp, '\n');
-getline(ss, temp, ' ');
-
-regex?
-trim commands?
-
-
-*/
+/**
+ * @brief Get the probability word, given the total number of words
+ * In the future use ln(probability) to avoid underflow
+ *
+ * @param count_of_word
+ * @param total_number_of_words
+ * @return float
+ */
+float get_probability(int count_of_word, int total_number_of_words) {
+    return (float)count_of_word / (float)total_number_of_words;
+    // use ln
+    // return log((float)count_of_word / (float)total_number_of_words);
+}

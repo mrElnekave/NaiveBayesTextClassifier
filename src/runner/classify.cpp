@@ -19,8 +19,6 @@ Running the model:
 
 #include "helpers/classification_funcs.cpp"
 
-std::string read_file(std::string path);
-
 int train_main(int argc, char* argv[]);
 int random_main(int argc, char* argv[]);
 int frequency_main(int argc, char* argv[]);
@@ -45,15 +43,10 @@ int main(int argc, char** argv) {
     std::string flag = argv[1];
 
     if (flag == "-train") {
-        char command[24 + strlen(argv[2])] = "/bin/bash ./train.bash ";
-        char author_name[strlen(argv[2])];
-        strcpy(author_name, argv[2]);
-        std::strcat(command, author_name);
-        std::system(command);
-        return 0;
+        return train_main(argc - 1, argv + 1);
     } else if (flag == "-model=random")
         return random_main(argc - 1, argv + 1);
-    else if (flag == "-model=statistical")
+    else if (flag == "-model=frequency")
         return frequency_main(argc - 1, argv + 1);
 
     else
@@ -61,32 +54,23 @@ int main(int argc, char** argv) {
 }
 
 /**
- * The runner for the training function.
+ * The runner for the training model.
  * @param argc: The number of arguments without the program name.
  * @param argv: The arguments without the program name.
  */
 int train_main(int argc, char* argv[]) {
-    std::string* authors = new std::string[argc - 1];
-    for (int i = 0; i < argc - 1; i++) {
-        authors[i] = argv[i + 1];
-    }
+    // // print all argv and return
+    // for (int i = 0; i < argc; i++) {
+    //     std::cout << argv[i] << std::endl;
+    // }
+    // return 0;
 
-    std::string* files = new std::string[argc - 1];
-    for (int i = 0; i < argc - 1; i++) {
-        files[i] = "data/" + authors[i] + ".txt";
-    }
-
-    std::string* contents = new std::string[argc - 1];
-    for (int i = 0; i < argc - 1; i++) {
-        contents[i] = read_file(files[i]);
-    }
-
-    // train(contents, argc - 1);
-    auto map = frequency_trainer("Yamm and Nathan are working on this project.\nWow this is so cool. Damn it works on this computer. I am repeathing this.\n\n\n\n\n\n\n Even works with many new lines.");
-    for (auto it = map.begin(); it != map.end(); it++) {
-        std::cout << it->first << ": " << it->second << std::endl;
-    }
-
+    if (argc < 2) return classify_help();
+    char command[24 + strlen(argv[1])] = "bash ./train_dir.bash ";
+    char author_name[strlen(argv[1])];
+    strcpy(author_name, argv[1]);
+    std::strcat(command, author_name);
+    std::system(command);
     return 0;
 }
 
@@ -98,12 +82,12 @@ int train_main(int argc, char* argv[]) {
 int random_main(int argc, char* argv[]) {
     if (argc < 2) return classify_help();
 
-    std::string input = read_file(argv[1]);
+    // std::string input = read_file(argv[1]);
 
-    Author_Probability output = random_classify(input);
+    // Author_Probability output = random_classify(input);
 
-    std::cout << "Author: " << output.author << std::endl;
-    std::cout << "Probability: " << output.probability << std::endl;
+    // std::cout << "Author: " << output.author << std::endl;
+    // std::cout << "Probability: " << output.probability << std::endl;
 
     return 0;
 }
@@ -116,30 +100,18 @@ int random_main(int argc, char* argv[]) {
 int frequency_main(int argc, char* argv[]) {
     if (argc < 2) return classify_help();
 
-    std::string input = read_file(argv[1]);
+    std::ifstream file(argv[1]);
 
-    Author_Probability output = frequency_classify(input);
-
-    std::cout << "Author: " << output.author << std::endl;
-    std::cout << "Probability: " << output.probability << std::endl;
-
-    return 0;
-}
-
-/**
- * Read a file into a string.
- * @return The contents of the file.
- */
-std::string read_file(std::string path) {
-    std::stringstream output;
-
-    std::ifstream infile(path);
-    std::string line;
-    while (std::getline(infile, line)) {
-        std::istringstream iss(line);
-
-        output << line << std::endl;
+    if (!file.is_open()) {
+        std::cout << "Error: Could not open file." << std::endl;
+        return 1;
     }
 
-    return output.str();
+    std::vector<Author_Probability> output = frequency_classify(file, "./Models/Counts/");
+    for (int i = 0; i < output.size(); i++) {
+        std::cout << "Author: " << output[i].author << std::endl;
+        std::cout << "Probability: " << output[i].probability << std::endl;
+    }
+
+    return 0;
 }
