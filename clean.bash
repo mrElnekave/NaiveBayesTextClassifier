@@ -4,6 +4,7 @@
 
 cat $* \
     | sed '1,/START OF THIS PROJECT/d' \
+    | ./expand_abbrev.sed \
     | tr A-Z a-z \
     | tr -d '[",]' \
     | sed -e 's/[.] */.~/g' \
